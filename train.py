@@ -27,15 +27,14 @@ def main():
     url = 'https://raw.githubusercontent.com/j0h4nnesk/Capstone_project_Titanic_Survival/main/train.csv'
     dataset = TabularDatasetFactory.from_delimited_files(url)
     
-    x = dataset.to_pandas_dataframe().dropna(inplace=True)
+    x = dataset.to_pandas_dataframe().dropna()
     x = x.drop('Cabin', axis=1)
     sex = pd.get_dummies(x['Sex'],drop_first=True)
     embark = pd.get_dummies(x['Embarked'],drop_first=True)
     x = pd.concat([x,sex,embark],axis=1)
-    x.drop(['Sex','Embarked','Ticket','Name'],axis=1)
-    x.drop(['PassengerId'],axis=1)
+    x.drop(['Sex','Embarked','Ticket','Name'],axis=1,inplace=True)
+    x.drop(['PassengerId'],axis=1,inplace=True)
     y = x.pop("Survived")
-    x = x.drop("Survived",axis=1)
 
     # Split data into train and test sets.
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=101)
