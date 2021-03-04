@@ -29,16 +29,73 @@ Dataset features:
 |fare|Passenger fare| |	
 |embarked|Port of Embarkation|C = Cherbourg, Q = Queenstown, S = Southampton|
 ### Task
-*TODO*: Explain the task you are going to be solving with this dataset and the features you will be using for it.
-
+The objective of this project is to classify passengers based on did they survive the Titanic shipwreck or not, 'Survived' as either 0 = *No* or 1 = *Yes*.
 ### Access
-*TODO*: Explain how you are accessing the data in your workspace.
-
+First I downloaded the dataset from [Kaggle](https://www.kaggle.com/c/titanic/overview) and uploaded it to my Github, and then made the data publicly accessible via this link: https://raw.githubusercontent.com/j0h4nnesk/Capstone_project_Titanic_Survival/main/train.csv
 ## Automated ML
-*TODO*: Give an overview of the `automl` settings and configuration you used for this experiment
+Below you can see an overview of AutoML settings and configurations:
+```
+# Automl settings
+automl_settings = {"n_cross_validations": 2,
+                    "primary_metric": 'accuracy',
+                    "enable_early_stopping": True,
+                    "max_concurrent_iterations": 4,
+                    "experiment_timeout_minutes": 30,
+                    "verbosity": logging.INFO
+                    }
+
+# Parameters for AutoMLConfig
+automl_config = AutoMLConfig(compute_target = compute_target,
+                            task='classification',
+                            training_data=dataset,
+                            label_column_name='Survived',
+                            path = project_folder,
+                            featurization= 'auto',
+                            debug_log = "automl_errors.log",
+                            enable_onnx_compatible_models=False,
+                            **automl_settings
+                            )
+```
+##### AutoML settings
+*n_cross_validations=2:* How many cross validations to perform when user validation data is not specified.
+
+*primary_metric='accuracy':* The metric that Automated Machine Learning will optimize for model selection.
+
+*enable_early_stopping=True* Whether to enable early termination if the score is not improving in the short term. 
+
+*max_concurrent_iterations=4:* Represents the maximum number of iterations that would be executed in parallel.
+
+*experiment_timeout_minutes=30:* Exit criteria that is used to define how long, in minutes, the experiment should continue to run. To help avoid experiment time out failures, 30 minutes was used as the timeout value.
+
+*verbosity=logging.INFO:* The verbosity level for writing to the log file.
+
+##### AutoML config
+
+*compute_target=compute_target:* The compute target to run the Automated Machine Learning experiment on.
+
+*task='classification':* The type of task to run.
+
+*training_data=dataset:* The training data to be used within the experiment. It should contain both training features and a label column.
+
+*label_column_name='Survived':* The name of the label column, the target column based on which the prediction is done.
+
+*path = project_folder:* The full path to the Azure Machine Learning project folder.
+
+*featurization= 'auto':* 'auto' / 'off' / FeaturizationConfig Indicator for whether featurization step should be done automatically or not.
+
+*debug_log = "automl_errors.log":* The log file to write debug information to. 
+
+*enable_onnx_compatible_models=False:* Whether to enable or disable enforcing the ONNX-compatible models. (([ONNX](https://docs.microsoft.com/en-us/azure/machine-learning/concept-onnx)) can help optimize the inference of your machine learning model. Inference, or model scoring, is the phase where the deployed model is used for prediction, most commonly on production data.)
 
 ### Results
 *TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
+Details of the AutoMl run can be viewed via the RunDetails widget: 
+![alt text](/img/capstone-1.png)
+The best model from the automl process was a voting ensemble model, which had an accuracy of 0.8249. Below you can see metrics , and the run ID, from the best run:
+![alt text](/img/capstone-2.png)
+and a screenshot from Azure ML Studio showing the best models:
+![alt text](/img/capstone-3.png)
+
 
 *TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
 
