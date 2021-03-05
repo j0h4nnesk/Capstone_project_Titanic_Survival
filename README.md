@@ -124,6 +124,9 @@ The best model obtained from Hyperdrive had an accuracy of 0.7636, which was wor
 For further improvement I would test also other algorithms in addition to logistic regression, and I would like to also experiment with tweaking other hyperparameters and try to get better results in that. However when looking at Kaggle the competition results are mostly quite on par with the results that I have gotten here (mostly between 70-80%) so in order to get higher accuracy levels we would probably need more training/test data (now the dataset contained "only" 891 rows i.e. passenger data points), and some more feature engineering.
 
 ## Model Deployment
+Model endpoint is active:
+![alt text](/img/capstone-9.png)
+
 As the better performing model came from AutoML experiment, the best AutoML model was the one I deployed. The model was deployed as an Azure Container Instance (ACI). To query the model data is serialized to JSON and sent to the model's endpoint as an http request. For an example of code used to interact with the deployed model below is a snippet from the 'Model Deployment' section of the automl notebook (automl.ipynb).
 ![alt text](/img/capstone-6.png)
 
