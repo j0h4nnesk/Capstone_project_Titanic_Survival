@@ -128,9 +128,11 @@ As the better performing model came from AutoML experiment, the best AutoML mode
 ![alt text](/img/capstone-6.png)
 
 Where sample data passed to the model:
+
 ![alt text](/img/capstone-7.png)
 
 As a response, the model will send back a list of predictions. In this case they will be '1' for survived or '0' for did not survive. 
+
 ![alt text](/img/capstone-8.png)
 
 ## Screen Recording
