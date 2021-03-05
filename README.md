@@ -1,5 +1,3 @@
-*NOTE:* This file is a template that you can use to create the README for your project. The *TODO* comments below will highlight the information you should be sure to include.
-
 # Using Machine Learning to Predict Titanic Disaster Survival
 
 My capstone project for Udacity's Machine Learning Engineer Nanodegree focuses on predicting which passengers survived the Titanic shipwreck, based on the dataset containing passenger data (ie name, age, gender, socio-economic class, etc). i.e. we are trying to build a predictive model that answers the question: “what sorts of people were more likely to survive?” The objective of this project falls into the category of classification. 
