@@ -125,6 +125,7 @@ For further improvement I would test also other algorithms in addition to logist
 
 ## Model Deployment
 Model endpoint is active:
+
 ![alt text](/img/capstone-9.png)
 
 As the better performing model came from AutoML experiment, the best AutoML model was the one I deployed. The model was deployed as an Azure Container Instance (ACI). To query the model data is serialized to JSON and sent to the model's endpoint as an http request. For an example of code used to interact with the deployed model below is a snippet from the 'Model Deployment' section of the automl notebook (automl.ipynb).
