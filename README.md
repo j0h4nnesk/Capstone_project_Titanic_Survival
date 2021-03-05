@@ -95,27 +95,49 @@ The best model from the automl process was a voting ensemble model, which had an
 ![alt text](/img/capstone-2.png)
 and a screenshot from Azure ML Studio showing the best models:
 ![alt text](/img/capstone-3.png)
-
-
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
+As a future improvement I would run AutoML for a longer period in hopes that a more performant model would arise. If not, I would investigate further the factors influencing model decisions in an effort to better understand when the model is correctly predicting survival (for what kind of passengers) and instances where the model breaks down.
 
 ## Hyperparameter Tuning
-*TODO*: What kind of model did you choose for this experiment and why? Give an overview of the types of parameters and their ranges used for the hyperparameter search
+I chose to use a custom Scikit-learn Logistic Regression model whose hyperparameters were optimized using HyperDrive. Logistic regression is best suited for binary classification models like this one. This is the main reason I chose it.
 
+#### Parameter sampler
+**RandomParameterSampling**, where hyperparameter values are randomly selected from the defined search space, was used as a sampler. It is a good choice as it is [more efficient, though less exhaustive compared to Grid search](https://www.sciencedirect.com/science/article/pii/S1674862X19300047) to search over the search space. Parameter sampler was specified using the following parameters: 
+
+*C:* Inverse of regularization strength; must be a positive float, where smaller values specify stronger regularization.
+
+*max_iter:* Maximum number of iterations taken for the solvers to converge.
+
+Parameter sampler was specified as shown below:
+```
+# Specify parameter sampler
+ps = RandomParameterSampling({
+    '--max_iter' : choice(20,40,80,100,150,200),
+    '--C' : choice(0.001,0.01,0.1, 0.5, 1,1.5,10,20,50,100)
+}) 
+```
 
 ### Results
-*TODO*: What are the results you got with your model? What were the parameters of the model? How could you have improved it?
+Completion of the HyperDrive run (RunDetails widget):
+![alt text](/img/capstone-4.png)
 
-*TODO* Remeber to provide screenshots of the `RunDetails` widget as well as a screenshot of the best model trained with it's parameters.
+The best model obtained from Hyperdrive had an accuracy of 0.7636, which was worse than the accuracy of AutoML model.
+![alt text](/img/capstone-5.png)
+
+For further improvement I would test also other algorithms in addition to logistic regression, and I would like to also experiment with tweaking other hyperparameters and try to get better results in that. However when looking at Kaggle the competition results are mostly quite on par with the results that I have gotten here (mostly between 70-80%) so in order to get higher accuracy levels we would probably need more training/test data (now the dataset contained "only" 891 rows i.e. passenger data points), and some more feature engineering.
 
 ## Model Deployment
-*TODO*: Give an overview of the deployed model and instructions on how to query the endpoint with a sample input.
+As the better performing model came from AutoML experiment, the best AutoML model was the one I deployed. The model was deployed as an Azure Container Instance (ACI). To query the model data is serialized to JSON and sent to the model's endpoint as an http request. For an example of code used to interact with the deployed model below is a snippet from the 'Model Deployment' section of the automl notebook (automl.ipynb).
+![alt text](/img/capstone-6.png)
+
+Where sample data passed to the model:
+![alt text](/img/capstone-7.png)
+
+As a response, the model will send back a list of predictions. In this case they will be '1' for survived or '0' for did not survive. 
+![alt text](/img/capstone-8.png)
 
 ## Screen Recording
-*TODO* Provide a link to a screen recording of the project in action. Remember that the screencast should demonstrate:
+The screen recording can be found [here](https://www.icloud.com/iclouddrive/0YPSTFT5SbDY0W0wtNfASO66Q#Capstone-project) and it shows the project in action, and more specifically demonstrates:
 - A working model
-- Demo of the deployed  model
+- Demo of the deployed model
 - Demo of a sample request sent to the endpoint and its response
 
-## Standout Suggestions
-*TODO (Optional):* This is where you can provide information about any standout suggestions that you have attempted.
