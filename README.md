@@ -2,7 +2,7 @@
 
 My capstone project for Udacity's Machine Learning Engineer Nanodegree focuses on predicting which passengers survived the Titanic shipwreck, based on the dataset containing passenger data (ie name, age, gender, socio-economic class, etc). i.e. we are trying to build a predictive model that answers the question: “what sorts of people were more likely to survive?” The objective of this project falls into the category of classification. 
 
-In order to approach this problem, I made use of both Azure's automated ML (AutoML) capabilities and Azure's HyperDrive hyperparameter tuning tool. The best models from each experiment were compared to find the most performant model and the best model was then deployed as an Azure container instance (ACI) for consumption. Both automated ML and Hyperdrive produced models with somewhat similar performance as assessed by Accuracy. AutoML model had an accuracy of 0.8249 and HyperDrive model had an accuracy of 0.7636.
+In order to approach this problem, I made use of both Azure's automated ML (AutoML) capabilities and Azure's HyperDrive hyperparameter tuning tool. The best models from each experiment were compared to find the most performant model and the best model was then deployed as an Azure container instance (ACI) for consumption. Both automated ML and Hyperdrive produced models with somewhat similar performance as assessed by Accuracy. AutoML model had an accuracy of 0.82154 and HyperDrive model had an accuracy of 0.7636.
 
 The below diagram shows and overview of the workflow including the main tasks: 
 ![alt text](/img/capstone-diagram.png)
@@ -63,7 +63,7 @@ automl_config = AutoMLConfig(compute_target = compute_target,
 
 *max_concurrent_iterations=4:* Represents the maximum number of iterations that would be executed in parallel.
 
-*experiment_timeout_minutes=30:* Exit criteria that is used to define how long, in minutes, the experiment should continue to run. To help avoid experiment time out failures, 30 minutes was used as the timeout value.
+*experiment_timeout_minutes=60:* Exit criteria that is used to define how long, in minutes, the experiment should continue to run. To help avoid experiment time out failures, 60 minutes was used as the timeout value.
 
 *verbosity=logging.INFO:* The verbosity level for writing to the log file.
 
@@ -72,6 +72,8 @@ automl_config = AutoMLConfig(compute_target = compute_target,
 *compute_target=compute_target:* The compute target to run the Automated Machine Learning experiment on.
 
 *task='classification':* The type of task to run.
+
+*blocked_models=['XGBoostClassifier']*: Blocking XGBoostClassifier algorithm to prevent AttributeError (/anaconda/envs/azureml_py36/lib/libxgboost.so: undefined symbol: XGBoosterUnserializeFromBuffer)
 
 *training_data=dataset:* The training data to be used within the experiment. It should contain both training features and a label column.
 
@@ -88,11 +90,13 @@ automl_config = AutoMLConfig(compute_target = compute_target,
 ### Results
 *TODO*: What are the results you got with your automated ML model? What were the parameters of the model? How could you have improved it?
 Details of the AutoMl run can be viewed via the RunDetails widget: 
-![alt text](/img/capstone-1.png)
+![alt text](/img/capstone-10.png)
+Model parameters (using get_output() method):
+![alt text](/img/capstone-14.png)
 The best model from the automl process was a voting ensemble model, which had an accuracy of 0.8249. Below you can see metrics , and the run ID, from the best run:
-![alt text](/img/capstone-2.png)
+![alt text](/img/capstone-11.png)
 and a screenshot from Azure ML Studio showing the best models:
-![alt text](/img/capstone-3.png)
+![alt text](/img/capstone-12.png)
 As a future improvement I would run AutoML for a longer period in hopes that a more performant model would arise. If not, I would investigate further the factors influencing model decisions in an effort to better understand when the model is correctly predicting survival (for what kind of passengers) and instances where the model breaks down.
 
 ## Hyperparameter Tuning
@@ -126,7 +130,7 @@ For further improvement I would test also other algorithms in addition to logist
 ## Model Deployment
 Model endpoint is active:
 
-![alt text](/img/capstone-9.png)
+![alt text](/img/capstone-13.png)
 
 As the better performing model came from AutoML experiment, the best AutoML model was the one I deployed. The model was deployed as an Azure Container Instance (ACI). To query the model data is serialized to JSON and sent to the model's endpoint as an http request. For an example of code used to interact with the deployed model below is a snippet from the 'Model Deployment' section of the automl notebook (automl.ipynb).
 ![alt text](/img/capstone-6.png)
